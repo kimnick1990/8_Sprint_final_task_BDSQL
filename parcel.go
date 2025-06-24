@@ -35,7 +35,7 @@ func (s ParcelStore) Get(number int) (Parcel, error) {
 	if err == sql.ErrNoRows {
 		return parcel, fmt.Errorf("посылка с номером %d не найдена", number)
 	} else if err != nil {
-		return parcel, err
+		return Parcel{}, err
 	}
 	return parcel, nil
 }
@@ -56,7 +56,9 @@ func (s ParcelStore) GetByClient(client int) ([]Parcel, error) {
 		}
 		parcels = append(parcels, parcel)
 	}
-
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
 	return parcels, nil
 }
 
